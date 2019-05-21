@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.system.dao.WedsetDao">
+
+	<select id="get" resultType="com.bootdo.system.domain.WedsetDO">
+		select `id`,`title`,`keyword`,`describe`,`telephone`,`mailbox`,`number`,`copyright` from wedset where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.system.domain.WedsetDO">
+		select `id`,`title`,`keyword`,`describe`,`telephone`,`mailbox`,`number`,`copyright` from wedset
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="title != null and title != ''"> and title = #{title} </if>
+		  		  <if test="keyword != null and keyword != ''"> and keyword = #{keyword} </if>
+		  		  <if test="describe != null and describe != ''"> and describe = #{describe} </if>
+		  		  <if test="telephone != null and telephone != ''"> and telephone = #{telephone} </if>
+		  		  <if test="mailbox != null and mailbox != ''"> and mailbox = #{mailbox} </if>
+		  		  <if test="number != null and number != ''"> and number = #{number} </if>
+		  		  <if test="copyright != null and copyright != ''"> and copyright = #{copyright} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from wedset
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="title != null and title != ''"> and title = #{title} </if>
+		  		  <if test="keyword != null and keyword != ''"> and keyword = #{keyword} </if>
+		  		  <if test="describe != null and describe != ''"> and describe = #{describe} </if>
+		  		  <if test="telephone != null and telephone != ''"> and telephone = #{telephone} </if>
+		  		  <if test="mailbox != null and mailbox != ''"> and mailbox = #{mailbox} </if>
+		  		  <if test="number != null and number != ''"> and number = #{number} </if>
+		  		  <if test="copyright != null and copyright != ''"> and copyright = #{copyright} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.system.domain.WedsetDO" useGeneratedKeys="true" keyProperty="id">
+		insert into wedset
+		(
+			`title`, 
+			`keyword`, 
+			`describe`, 
+			`telephone`, 
+			`mailbox`, 
+			`number`, 
+			`copyright`
+		)
+		values
+		(
+			#{title}, 
+			#{keyword}, 
+			#{describe}, 
+			#{telephone}, 
+			#{mailbox}, 
+			#{number}, 
+			#{copyright}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.system.domain.WedsetDO">
+		update wedset 
+		<set>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="keyword != null">`keyword` = #{keyword}, </if>
+			<if test="describe != null">`describe` = #{describe}, </if>
+			<if test="telephone != null">`telephone` = #{telephone}, </if>
+			<if test="mailbox != null">`mailbox` = #{mailbox}, </if>
+			<if test="number != null">`number` = #{number}, </if>
+			<if test="copyright != null">`copyright` = #{copyright}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from wedset where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from wedset where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
